@@ -1,24 +1,36 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
 
-// เชื่อมต่อฐานข้อมูล
-mongoose.connect(process.env.MONGO_URI, { 
-  useNewUrlParser: true, 
-  useUnifiedTopology: true 
-})
-.then(() => console.log("Database connected successfully"))
-.catch(err => console.error("Database connection error:", err));
+// 1. Connect to MongoDB
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
 
-// -------------------------
-// สร้าง Schema
+// 2. Create a Schema
 const personSchema = new mongoose.Schema({
   name: { type: String, required: true },
   age: Number,
   favoriteFoods: [String]
 });
 
-// สร้าง Model
+// 3. Create a Model
 const Person = mongoose.model("Person", personSchema);
 
-// ✅ FreeCodeCamp ต้องการให้ export ตัว Model ออกมา
-module.exports = Person; error:", err));
+// 4. Create and Save a Record
+const createAndSavePerson = (done) => {
+  const person = new Person({
+    name: "John",
+    age: 25,
+    favoriteFoods: ["Pizza", "Burger"]
+  });
+
+  person.save((err, data) => {
+    if (err) return done(err);
+    return done(null, data);
+  });
+};
+
+// ✅ Export (FreeCodeCamp ใช้อ่านตรงนี้)
+exports.PersonModel = Person;
+exports.createAndSavePerson = createAndSavePerson;
