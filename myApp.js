@@ -54,8 +54,9 @@ const findPeopleByName = (personName, done) => {
 
 // Remove Many People
 const removeManyPeople = (nameToRemove, done) => {
-  Person.deleteMany({ name: nameToRemove }, (err, result) => {
+  Person.remove({ name: nameToRemove }, (err, result) => {
     if (err) return done(err);
+    // ส่ง result object กลับเหมือนเดิม
     return done(null, result);
   });
 };
