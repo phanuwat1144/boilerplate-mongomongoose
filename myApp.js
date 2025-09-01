@@ -126,11 +126,16 @@ const removeManyPeople = (done) => {
 // 🔟 Query chain: Chaining query helpers
 const queryChain = (done) => {
   const foodToSearch = "burrito";
-  Person.find({ favoriteFoods: foodToSearch })
-    .sort({ name: 1 })
-    .limit(2)
-    .select('-age')
-    .exec((err, data) => {
+
+  // สร้าง query object ก่อน
+  const findQuery = Person.find({ favoriteFoods: foodToSearch });
+
+  // chain helpers ตาม FCC hints
+  findQuery
+    .sort({ name: 1 })      // เรียงชื่อ A → Z
+    .limit(2)               // limit 2 doc
+    .select({ age: 0 })     // ซ่อน age
+    .exec((err, data) => {  // execute query
       if (err) return done(err);
       done(null, data);
     });
