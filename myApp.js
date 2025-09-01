@@ -103,9 +103,9 @@ const removeById = (personId, done) => {
 
 // 🔹 Delete Many Documents by name
 const removeManyPeople = (nameToRemove, done) => {
-  Person.remove({ name: nameToRemove }, (err, result) => {
+  Person.deleteMany({ name: nameToRemove }, (err, result) => {
     if (err) return done(err);
-    return done(null, result);
+    return done(null, result); // result.deletedCount จะบอกจำนวนคนที่ลบ
   });
 };
 
