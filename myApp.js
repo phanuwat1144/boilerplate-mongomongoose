@@ -63,10 +63,27 @@ const findPersonById = (personId, done) => {
   });
 };
 
-// 9️⃣ Export ให้ FreeCodeCamp ใช้
+// 9️⃣ Classic Update: find -> edit -> save
+const findEditThenSave = (personId, done) => {
+  Person.findById(personId, (err, person) => {
+    if (err) return done(err);
+
+    // เพิ่ม "hamburger" ใน favoriteFoods
+    person.favoriteFoods.push("hamburger");
+
+    // บันทึก document ใหม่
+    person.save((err, updatedPerson) => {
+      if (err) return done(err);
+      return done(null, updatedPerson);
+    });
+  });
+};
+
+// 10️⃣ Export ให้ FreeCodeCamp ใช้
 exports.PersonModel = Person;
 exports.createAndSavePerson = createAndSavePerson;
 exports.createManyPeople = createManyPeople;
 exports.findPeopleByName = findPeopleByName;
 exports.findOneByFood = findOneByFood;
 exports.findPersonById = findPersonById;
+exports.findEditThenSave = findEditThenSave;
