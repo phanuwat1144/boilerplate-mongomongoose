@@ -1,25 +1,19 @@
 {
   "name": "fcc-mongo-mongoose-challenges",
   "version": "0.0.1",
-  "description": "A boilerplate project",
+  "description": "A boilerplate project for FreeCodeCamp MongoDB challenges",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
-    "body-parser": "^1.15.2",
     "dotenv": "^8.2.0",
-    "express": "^4.12.4",
     "mongoose": "5.9.20"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/freeCodeCamp/boilerplate-mongomongoose.git"
   },
   "keywords": [
     "node",
     "mongoose",
-    "express"
+    "fcc"
   ],
   "license": "MIT"
 }
