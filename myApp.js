@@ -1,11 +1,13 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
 
-// 1️⃣ เชื่อมต่อ MongoDB
+// 1️⃣ เชื่อมต่อ MongoDB Atlas (ใช้ URI แบบ +srv)
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
-});
+})
+.then(() => console.log("MongoDB connected!"))
+.catch(err => console.log(err));
 
 // 2️⃣ สร้าง Schema
 const personSchema = new mongoose.Schema({
@@ -69,10 +71,8 @@ const findEditThenSave = (personId, done) => {
     if (err) return done(err);
     if (!person) return done(new Error("Person not found"));
 
-    // เพิ่ม "hamburger" ใน favoriteFoods
     person.favoriteFoods.push("hamburger");
 
-    // บันทึก document ใหม่
     person.save((err, updatedPerson) => {
       if (err) return done(err);
       return done(null, updatedPerson);
@@ -83,9 +83,9 @@ const findEditThenSave = (personId, done) => {
 // 🔹 New Update: findOneAndUpdate
 const findAndUpdate = (personName, done) => {
   Person.findOneAndUpdate(
-    { name: personName }, // query
-    { age: 20 },          // update
-    { new: true },        // คืน document หลังอัปเดต
+    { name: personName },
+    { age: 20 },
+    { new: true },
     (err, updatedPerson) => {
       if (err) return done(err);
       return done(null, updatedPerson);
@@ -101,11 +101,11 @@ const removeById = (personId, done) => {
   });
 };
 
-// 🔹 Delete Many Documents by name
+// 🔹 Delete Many Documents by name (ใช้ deleteMany แทน remove)
 const removeManyPeople = (nameToRemove, done) => {
   Person.deleteMany({ name: nameToRemove }, (err, result) => {
     if (err) return done(err);
-    return done(null, result); // result.deletedCount จะบอกจำนวนคนที่ลบ
+    return done(null, result);
   });
 };
 
