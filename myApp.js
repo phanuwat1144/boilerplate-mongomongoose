@@ -30,7 +30,7 @@ const createAndSavePerson = (done) => {
   });
 };
 
-// ✅ Create Many People
+// Create Many People
 const createManyPeople = (arrayOfPeople, done) => {
   Person.create(arrayOfPeople, (err, people) => {
     if (err) return done(err);
@@ -38,7 +38,16 @@ const createManyPeople = (arrayOfPeople, done) => {
   });
 };
 
+// ✅ Find People by Name
+const findPeopleByName = (personName, done) => {
+  Person.find({ name: personName }, (err, peopleFound) => {
+    if (err) return done(err);
+    return done(null, peopleFound);
+  });
+};
+
 // 🔹 Export ให้ FreeCodeCamp ใช้
 exports.PersonModel = Person;
 exports.createAndSavePerson = createAndSavePerson;
 exports.createManyPeople = createManyPeople;
+exports.findPeopleByName = findPeopleByName;
