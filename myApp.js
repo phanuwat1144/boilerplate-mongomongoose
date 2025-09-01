@@ -1,23 +1,26 @@
+
 require('dotenv').config();
 const mongoose = require('mongoose');
 
-// 1️⃣ Connect to MongoDB
+// เชื่อม MongoDB
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
-});
+})
+.then(() => console.log("MongoDB connected"))
+.catch(err => console.log("MongoDB connection error:", err));
 
-// 2️⃣ Schema
+// Schema
 const personSchema = new mongoose.Schema({
   name: { type: String, required: true },
   age: Number,
   favoriteFoods: [String]
 });
 
-// 3️⃣ Model
+// Model
 const Person = mongoose.model("Person", personSchema);
 
-// 4️⃣ Create & Save one person
+// Create & Save one person
 const createAndSavePerson = (done) => {
   const person = new Person({ name: "John", age: 25, favoriteFoods: ["Pizza", "Burger"] });
   person.save((err, data) => {
@@ -26,7 +29,7 @@ const createAndSavePerson = (done) => {
   });
 };
 
-// 5️⃣ Create many people
+// Create many people
 const createManyPeople = (arrayOfPeople, done) => {
   Person.create(arrayOfPeople, (err, data) => {
     if (err) return done(err);
@@ -34,7 +37,7 @@ const createManyPeople = (arrayOfPeople, done) => {
   });
 };
 
-// 6️⃣ Find people by name
+// Find people by name
 const findPeopleByName = (personName, done) => {
   Person.find({ name: personName }, (err, data) => {
     if (err) return done(err);
@@ -42,7 +45,7 @@ const findPeopleByName = (personName, done) => {
   });
 };
 
-// 7️⃣ Delete many people (ผ่าน FCC test)
+// Delete many people – ผ่าน FCC test แน่นอน
 const removeManyPeople = (done) => {
   const nameToRemove = "Mary";
   Person.deleteMany({ name: nameToRemove }, (err, result) => {
@@ -51,7 +54,7 @@ const removeManyPeople = (done) => {
   });
 };
 
-// 8️⃣ Exports
+// Exports สำหรับ FCC
 exports.PersonModel = Person;
 exports.createAndSavePerson = createAndSavePerson;
 exports.createManyPeople = createManyPeople;
