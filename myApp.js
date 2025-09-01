@@ -7,79 +7,130 @@ mongoose.connect(process.env.MONGO_URI, {
   useUnifiedTopology: true
 });
 
-// listener สำหรับจับ error connection
-mongoose.connection.on('error', (err) => {
-  console.error('MongoDB connection error:', err);
-});
-
-// Schema
+// สร้าง Schema
 const personSchema = new mongoose.Schema({
-  name: { type: String, required: true },
+  name: String,
   age: Number,
   favoriteFoods: [String]
 });
 
-// Model
+// สร้าง Model
 const Person = mongoose.model("Person", personSchema);
 
-// Create and Save One Person
+// ✅ Create and Save a Record of a Model
 const createAndSavePerson = (done) => {
   const person = new Person({
-    name: "John Doe",
+    name: "John",
     age: 25,
-    favoriteFoods: ["Pizza", "Burger"]
+    favoriteFoods: ["pizza", "burger"]
   });
 
   person.save((err, data) => {
     if (err) return done(err);
-    return done(null, data);
+    done(null, data);
   });
 };
 
-// Create Many People
+// ✅ Create Many Records with model.create()
 const createManyPeople = (arrayOfPeople, done) => {
   Person.create(arrayOfPeople, (err, people) => {
     if (err) return done(err);
-    return done(null, people);
+    done(null, people);
   });
 };
 
-// Find People by Name
+// ✅ Use model.find() to Search
 const findPeopleByName = (personName, done) => {
-  Person.find({ name: personName }, (err, peopleFound) => {
+  Person.find({ name: personName }, (err, data) => {
     if (err) return done(err);
-    return done(null, peopleFound);
+    done(null, data);
   });
 };
 
-// Remove Many People
+// ✅ Use model.findOne() to Return a Single
+const findOneByFood = (food, done) => {
+  Person.findOne({ favoriteFoods: food }, (err, data) => {
+    if (err) return done(err);
+    done(null, data);
+  });
+};
+
+// ✅ Use model.findById()
+const findPersonById = (personId, done) => {
+  Person.findById(personId, (err, data) => {
+    if (err) return done(err);
+    done(null, data);
+  });
+};
+
+// ✅ Perform Classic Updates by Running Find, Edit, then Save
+const findEditThenSave = (personId, done) => {
+  const foodToAdd = "hamburger";
+
+  Person.findById(personId, (err, person) => {
+    if (err) return done(err);
+    person.favoriteFoods.push(foodToAdd);
+    person.save((err, updatedPerson) => {
+      if (err) return done(err);
+      done(null, updatedPerson);
+    });
+  });
+};
+
+// ✅ Perform New Updates on a Document Using model.findOneAndUpdate()
+const findAndUpdate = (personName, done) => {
+  const ageToSet = 20;
+
+  Person.findOneAndUpdate(
+    { name: personName },
+    { age: ageToSet },
+    { new: true },
+    (err, updatedDoc) => {
+      if (err) return done(err);
+      done(null, updatedDoc);
+    }
+  );
+};
+
+// ✅ Delete One Document Using model.findByIdAndRemove
+const removeById = (personId, done) => {
+  Person.findByIdAndRemove(personId, (err, removedDoc) => {
+    if (err) return done(err);
+    done(null, removedDoc);
+  });
+};
+
+// ✅ Delete Many Documents with model.remove()
 const removeManyPeople = (nameToRemove, done) => {
-  // ใช้ Model.remove() ตามโจทย์ FCC
   Person.remove({ name: nameToRemove }, (err, result) => {
     if (err) return done(err);
-    return done(null, result); // ส่ง result ตรง ๆ ให้ FCC test
+    done(null, result); // FCC ต้องการแบบนี้
   });
 };
 
-// Placeholder ฟังก์ชันอื่นที่ server.js เรียก
-const findOneByFood = (food, done) => done(null, []);
-const findPersonById = (id, done) => done(null, null);
-const findEditThenSave = (id, done) => done(null, null);
-const findAndUpdate = (name, done) => done(null, null);
-const removeById = (id, done) => done(null, null);
-const queryChain = (done) => done(null, []);
+// ✅ Chain Search Query Helpers
+const queryChain = (done) => {
+  const foodToSearch = "burrito";
 
-// 🔹 Export ให้ FreeCodeCamp ใช้
+  Person.find({ favoriteFoods: foodToSearch })
+    .sort({ name: 1 })
+    .limit(2)
+    .select("-age")
+    .exec((err, data) => {
+      if (err) return done(err);
+      done(null, data);
+    });
+};
+
+// 👉 Export ฟังก์ชันทั้งหมดให้ FCC ใช้ test
 exports.PersonModel = Person;
 exports.createAndSavePerson = createAndSavePerson;
 exports.createManyPeople = createManyPeople;
 exports.findPeopleByName = findPeopleByName;
-exports.removeManyPeople = removeManyPeople;
-
-// ฟังก์ชัน placeholder
 exports.findOneByFood = findOneByFood;
 exports.findPersonById = findPersonById;
 exports.findEditThenSave = findEditThenSave;
 exports.findAndUpdate = findAndUpdate;
 exports.removeById = removeById;
+exports.removeManyPeople = removeManyPeople;
 exports.queryChain = queryChain;
