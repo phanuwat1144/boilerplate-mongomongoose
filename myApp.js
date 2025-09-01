@@ -70,11 +70,10 @@ const removeById = (personId, done) => {
   Person.findByIdAndRemove(personId, (err, removedPerson) => done(err, removedPerson));
 };
 
-// ใช้ remove() แทน deleteMany() เพื่อให้ test FreeCodeCamp ผ่าน
 const removeManyPeople = (nameToRemove, done) => {
-  Person.remove({ name: nameToRemove }, (err, result) => {
+  Person.deleteMany({ name: nameToRemove }, (err, result) => {
     if (err) return done(err);
-    done(null, result);
+    done(null, result); // result จะมี { acknowledged: true, deletedCount: X }
   });
 };
 
