@@ -112,9 +112,10 @@ const removeById = (personId, done) => {
 // 9) Delete Many Documents with model.remove()
 const removeManyPeople = (done) => {
   const nameToRemove = "Mary";
-  Person.remove({ name: nameToRemove }, (err, result) => {
+
+  Person.remove({ name: nameToRemove }, (err, data) => {
     if (err) return done(err);
-    return done(null, result);
+    done(null, data);
   });
 };
 
