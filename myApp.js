@@ -1,23 +1,24 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
 
-// เชื่อม MongoDB
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
+// ✅ เชื่อม MongoDB
+mongoose.connect(process.env.MONGO_URI, { 
+  useNewUrlParser: true, 
+  useUnifiedTopology: true 
 });
 
-// สร้าง Schema
+// ✅ สร้าง Schema
 const personSchema = new mongoose.Schema({
   name: String,
   age: Number,
   favoriteFoods: [String]
 });
 
-// สร้าง Model
+// ✅ สร้าง Model
 const Person = mongoose.model("Person", personSchema);
 
-// ✅ Create and Save a Record of a Model
+// ----------------------------------------------------
+// 1) Create and Save a Record of a Model
 const createAndSavePerson = (done) => {
   const person = new Person({
     name: "John",
@@ -27,43 +28,48 @@ const createAndSavePerson = (done) => {
 
   person.save((err, data) => {
     if (err) return done(err);
-    done(null, data);
+    return done(null, data);
   });
 };
 
-// ✅ Create Many Records with model.create()
+// ----------------------------------------------------
+// 2) Create Many Records with model.create()
 const createManyPeople = (arrayOfPeople, done) => {
   Person.create(arrayOfPeople, (err, people) => {
     if (err) return done(err);
-    done(null, people);
+    return done(null, people);
   });
 };
 
-// ✅ Use model.find() to Search
+// ----------------------------------------------------
+// 3) Use model.find() to Search Your Database
 const findPeopleByName = (personName, done) => {
-  Person.find({ name: personName }, (err, data) => {
+  Person.find({ name: personName }, (err, people) => {
     if (err) return done(err);
-    done(null, data);
+    return done(null, people);
   });
 };
 
-// ✅ Use model.findOne() to Return a Single
+// ----------------------------------------------------
+// 4) Use model.findOne() to Return a Single Matching Document
 const findOneByFood = (food, done) => {
-  Person.findOne({ favoriteFoods: food }, (err, data) => {
+  Person.findOne({ favoriteFoods: food }, (err, person) => {
     if (err) return done(err);
-    done(null, data);
+    return done(null, person);
   });
 };
 
-// ✅ Use model.findById()
+// ----------------------------------------------------
+// 5) Use model.findById() to Search Your Database By _id
 const findPersonById = (personId, done) => {
-  Person.findById(personId, (err, data) => {
+  Person.findById(personId, (err, person) => {
     if (err) return done(err);
-    done(null, data);
+    return done(null, person);
   });
 };
 
-// ✅ Perform Classic Updates by Running Find, Edit, then Save
+// ----------------------------------------------------
+// 6) Perform Classic Updates by Running Find, Edit, then Save
 const findEditThenSave = (personId, done) => {
   const foodToAdd = "hamburger";
 
@@ -72,12 +78,13 @@ const findEditThenSave = (personId, done) => {
     person.favoriteFoods.push(foodToAdd);
     person.save((err, updatedPerson) => {
       if (err) return done(err);
-      done(null, updatedPerson);
+      return done(null, updatedPerson);
     });
   });
 };
 
-// ✅ Perform New Updates on a Document Using model.findOneAndUpdate()
+// ----------------------------------------------------
+// 7) Perform New Updates on a Document Using model.findOneAndUpdate()
 const findAndUpdate = (personName, done) => {
   const ageToSet = 20;
 
@@ -87,28 +94,32 @@ const findAndUpdate = (personName, done) => {
     { new: true },
     (err, updatedDoc) => {
       if (err) return done(err);
-      done(null, updatedDoc);
+      return done(null, updatedDoc);
     }
   );
 };
 
-// ✅ Delete One Document Using model.findByIdAndRemove
+// ----------------------------------------------------
+// 8) Delete One Document Using model.findByIdAndRemove
 const removeById = (personId, done) => {
   Person.findByIdAndRemove(personId, (err, removedDoc) => {
     if (err) return done(err);
-    done(null, removedDoc);
+    return done(null, removedDoc);
   });
 };
 
-// ✅ Delete Many Documents with model.remove()
-const removeManyPeople = (nameToRemove, done) => {
+// ----------------------------------------------------
+// 9) Delete Many Documents with model.remove()
+const removeManyPeople = (done) => {
+  const nameToRemove = "Mary";
   Person.remove({ name: nameToRemove }, (err, result) => {
     if (err) return done(err);
-    done(null, result); // FCC ต้องการแบบนี้
+    return done(null, result);
   });
 };
 
-// ✅ Chain Search Query Helpers
+// ----------------------------------------------------
+// 10) Chain Search Query Helpers to Narrow Search Results
 const queryChain = (done) => {
   const foodToSearch = "burrito";
 
@@ -118,11 +129,11 @@ const queryChain = (done) => {
     .select("-age")
     .exec((err, data) => {
       if (err) return done(err);
-      done(null, data);
+      return done(null, data);
     });
 };
 
-// 👉 Export ฟังก์ชันทั้งหมดให้ FCC ใช้ test
+// ----------------------------------------------------
 exports.PersonModel = Person;
 exports.createAndSavePerson = createAndSavePerson;
 exports.createManyPeople = createManyPeople;
