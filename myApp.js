@@ -103,9 +103,10 @@ const removeById = (personId, done) => {
 // 9) Delete Many People (FCC Hint)
 const removeManyPeople = (done) => {
   const nameToRemove = "Mary";
-  Person.remove({ name: nameToRemove }, (err, response) => {
-    if (err) return done(err); // แก้ตรงนี้
-    done(null, response);       // ส่ง response กลับตรง ๆ
+
+  Person.remove({ name: nameToRemove }, (err, data) => {
+    if (err) return done(err);
+    done(null, data);
   });
 };
 // 10) Chain Search Query Helpers
