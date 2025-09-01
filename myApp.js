@@ -13,11 +13,9 @@ mongoose.connect(process.env.MONGO_URI, {
 .then(() => console.log("MongoDB connected!"))
 .catch(err => console.log("MongoDB connection error:", err));
 
-mongoose.connection.on('error', err => {
-  console.error('MongoDB connection error event:', err);
-});
+mongoose.connection.on('error', err => console.error('MongoDB connection error event:', err));
 
-// 2️⃣ สร้าง Schema และ Model
+// 2️⃣ Schema และ Model
 const personSchema = new mongoose.Schema({
   name: { type: String, required: true },
   age: Number,
@@ -35,7 +33,6 @@ const createAndSavePerson = (done) => {
     age: 25,
     favoriteFoods: ["Pizza", "Burger"]
   });
-
   person.save((err, data) => done(err, data));
 };
 
@@ -84,12 +81,12 @@ const removeById = (personId, done) => {
   Person.findByIdAndRemove(personId, (err, removedPerson) => done(err, removedPerson));
 };
 
-// Delete Many People by Name
+// Delete Many People by Name (ใช้ remove() ตามโจทย์ FreeCodeCamp)
 const removeManyPeople = (nameToRemove, done) => {
-  Person.deleteMany({ name: nameToRemove }, (err, result) => done(err, result));
+  Person.remove({ name: nameToRemove }, (err, result) => done(err, result));
 };
 
-// 4️⃣ Export Functions (FreeCodeCamp / Testing)
+// 4️⃣ Export Functions สำหรับ FreeCodeCamp / Testing
 module.exports = {
   PersonModel: Person,
   createAndSavePerson,
