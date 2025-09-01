@@ -19,9 +19,9 @@ const Person = mongoose.model("Person", personSchema);
 // 🔹 Remove Many People
 const removeManyPeople = (done) => {
   const nameToRemove = "Mary";
-  Person.remove({ name: nameToRemove }, (err, result) => {
+  Person.remove({ name: nameToRemove }, function(err, data) {
     if (err) return done(err);
-    return done(null, result);
+    done(null, data);
   });
 };
 
