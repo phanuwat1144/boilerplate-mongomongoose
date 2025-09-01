@@ -47,7 +47,7 @@ const findPeopleByName = (personName, done) => {
 // ✅ Delete many (ทดสอบรุ่นใหม่ของ FCC มักยอมรับ deleteMany ดีกว่า remove)
 const removeManyPeople = (done) => {
   const nameToRemove = "Mary";
-  Person.deleteMany({ name: nameToRemove }, (err, result) => {
+  Person.remove({ name: nameToRemove }, (err, result) => {
     if (err) return done(err);
     done(null, result);
   });
