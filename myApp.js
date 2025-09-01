@@ -103,9 +103,9 @@ const removeById = (personId, done) => {
 
 // 🔹 Delete Many Documents by name (ใช้ deleteMany แทน remove)
 const removeManyPeople = (nameToRemove, done) => {
-  Person.deleteMany({ name: nameToRemove }, (err, result) => {
+  Person.remove({ name: nameToRemove }, (err, result) => {
     if (err) return done(err);
-    return done(null, result);
+    return done(null, result); // result จะเป็น JSON object เช่น { acknowledged: true, deletedCount: X }
   });
 };
 
