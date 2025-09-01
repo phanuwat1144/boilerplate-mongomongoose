@@ -1,24 +1,23 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
 
-// ✅ เชื่อม MongoDB
-mongoose.connect(process.env.MONGO_URI, { 
-  useNewUrlParser: true, 
-  useUnifiedTopology: true 
+// เชื่อม MongoDB
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
 });
 
-// ✅ สร้าง Schema
+// Schema
 const personSchema = new mongoose.Schema({
-  name: String,
+  name: { type: String, required: true },
   age: Number,
   favoriteFoods: [String]
 });
 
-// ✅ สร้าง Model
+// Model
 const Person = mongoose.model("Person", personSchema);
 
-// ----------------------------------------------------
-// 1) Create and Save a Record of a Model
+// 1) Create and Save One Person
 const createAndSavePerson = (done) => {
   const person = new Person({
     name: "John",
@@ -32,8 +31,7 @@ const createAndSavePerson = (done) => {
   });
 };
 
-// ----------------------------------------------------
-// 2) Create Many Records with model.create()
+// 2) Create Many Records
 const createManyPeople = (arrayOfPeople, done) => {
   Person.create(arrayOfPeople, (err, people) => {
     if (err) return done(err);
@@ -41,8 +39,7 @@ const createManyPeople = (arrayOfPeople, done) => {
   });
 };
 
-// ----------------------------------------------------
-// 3) Use model.find() to Search Your Database
+// 3) Find People by Name
 const findPeopleByName = (personName, done) => {
   Person.find({ name: personName }, (err, people) => {
     if (err) return done(err);
@@ -50,8 +47,7 @@ const findPeopleByName = (personName, done) => {
   });
 };
 
-// ----------------------------------------------------
-// 4) Use model.findOne() to Return a Single Matching Document
+// 4) Find One by Food
 const findOneByFood = (food, done) => {
   Person.findOne({ favoriteFoods: food }, (err, person) => {
     if (err) return done(err);
@@ -59,8 +55,7 @@ const findOneByFood = (food, done) => {
   });
 };
 
-// ----------------------------------------------------
-// 5) Use model.findById() to Search Your Database By _id
+// 5) Find by ID
 const findPersonById = (personId, done) => {
   Person.findById(personId, (err, person) => {
     if (err) return done(err);
@@ -68,8 +63,7 @@ const findPersonById = (personId, done) => {
   });
 };
 
-// ----------------------------------------------------
-// 6) Perform Classic Updates by Running Find, Edit, then Save
+// 6) Find, Edit then Save
 const findEditThenSave = (personId, done) => {
   const foodToAdd = "hamburger";
 
@@ -83,8 +77,7 @@ const findEditThenSave = (personId, done) => {
   });
 };
 
-// ----------------------------------------------------
-// 7) Perform New Updates on a Document Using model.findOneAndUpdate()
+// 7) Find One and Update
 const findAndUpdate = (personName, done) => {
   const ageToSet = 20;
 
@@ -99,8 +92,7 @@ const findAndUpdate = (personName, done) => {
   );
 };
 
-// ----------------------------------------------------
-// 8) Delete One Document Using model.findByIdAndRemove
+// 8) Delete One by ID
 const removeById = (personId, done) => {
   Person.findByIdAndRemove(personId, (err, removedDoc) => {
     if (err) return done(err);
@@ -108,19 +100,16 @@ const removeById = (personId, done) => {
   });
 };
 
-// ----------------------------------------------------
-// 9) Delete Many Documents with model.remove()
+// 9) Delete Many People (ตามโจทย์ FCC)
 const removeManyPeople = (done) => {
   const nameToRemove = "Mary";
-
   Person.remove({ name: nameToRemove }, (err, data) => {
     if (err) return done(err);
-    done(null, data);
+    return done(null, data);
   });
 };
 
-// ----------------------------------------------------
-// 10) Chain Search Query Helpers to Narrow Search Results
+// 10) Chain Search Query Helpers
 const queryChain = (done) => {
   const foodToSearch = "burrito";
 
@@ -134,7 +123,7 @@ const queryChain = (done) => {
     });
 };
 
-// ----------------------------------------------------
+// Export
 exports.PersonModel = Person;
 exports.createAndSavePerson = createAndSavePerson;
 exports.createManyPeople = createManyPeople;
