@@ -1,4 +1,3 @@
-
 require('dotenv').config();
 const mongoose = require('mongoose');
 
@@ -17,8 +16,27 @@ const personSchema = new mongoose.Schema({
   favoriteFoods: [String]
 });
 
-// Model
-const Person = mongoose.model("Person", personSchema);
+// Model (collection ชื่อ 'people')
+const Person = mongoose.model("people", personSchema);
+
+// --- Insert dummy data สำหรับ test ---
+const insertDummyData = () => {
+  const dummyPeople = [
+    { name: "Mary", age: 16, favoriteFoods: ["burrito"] },
+    { name: "Alice", age: 25, favoriteFoods: ["burrito", "Pizza"] },
+    { name: "Bob", age: 30, favoriteFoods: ["Pasta"] }
+  ];
+
+  // ใช้ insertMany แต่ ignore error ถ้า data ซ้ำ
+  Person.insertMany(dummyPeople, { ordered: false }, (err, docs) => {
+    if (err) console.log("Dummy data insert ignored duplicates:", err.message);
+  });
+};
+
+// เรียก insert dummy data
+insertDummyData();
+
+// --- FCC Functions ---
 
 // 1️⃣ Create & Save one person
 const createAndSavePerson = (done) => {
@@ -118,7 +136,7 @@ const queryChain = (done) => {
     });
 };
 
-// Exports สำหรับ FCC
+// --- Exports ---
 exports.PersonModel = Person;
 exports.createAndSavePerson = createAndSavePerson;
 exports.createManyPeople = createManyPeople;
