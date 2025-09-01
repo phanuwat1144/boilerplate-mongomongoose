@@ -104,11 +104,10 @@ const removeById = (personId, done) => {
 const removeManyPeople = (done) => {
   const nameToRemove = "Mary";
   Person.remove({ name: nameToRemove }, (err, response) => {
-    if (err) return console.log(err);
-    done(null, response);
+    if (err) return done(err); // แก้ตรงนี้
+    done(null, response);       // ส่ง response กลับตรง ๆ
   });
 };
-
 // 10) Chain Search Query Helpers
 const queryChain = (done) => {
   const foodToSearch = "burrito";
