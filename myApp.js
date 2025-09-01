@@ -55,9 +55,18 @@ const findOneByFood = (food, done) => {
   });
 };
 
-// 8️⃣ Export ให้ FreeCodeCamp ใช้
+// 8️⃣ หา person คนเดียวตาม _id
+const findPersonById = (personId, done) => {
+  Person.findById(personId, (err, personFound) => {
+    if (err) return done(err);
+    return done(null, personFound);
+  });
+};
+
+// 9️⃣ Export ให้ FreeCodeCamp ใช้
 exports.PersonModel = Person;
 exports.createAndSavePerson = createAndSavePerson;
 exports.createManyPeople = createManyPeople;
 exports.findPeopleByName = findPeopleByName;
 exports.findOneByFood = findOneByFood;
+exports.findPersonById = findPersonById;
