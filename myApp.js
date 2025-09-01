@@ -70,10 +70,11 @@ const removeById = (personId, done) => {
   Person.findByIdAndRemove(personId, (err, removedPerson) => done(err, removedPerson));
 };
 
+// ใช้ deleteMany() แทน remove() เพื่อให้ test FreeCodeCamp ผ่าน
 const removeManyPeople = (nameToRemove, done) => {
   Person.deleteMany({ name: nameToRemove }, (err, result) => {
     if (err) return done(err);
-    done(null, result);
+    done(null, result); // result มี { acknowledged: true, deletedCount: X }
   });
 };
 
@@ -91,6 +92,6 @@ module.exports = {
   removeManyPeople
 };
 
-// Start server (ไม่จำเป็นสำหรับ FreeCodeCamp test แต่ไว้เช็ค localhost)
+// Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
