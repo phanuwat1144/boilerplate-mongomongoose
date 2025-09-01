@@ -17,7 +17,6 @@ const personSchema = new mongoose.Schema({
 // Model
 const Person = mongoose.model("Person", personSchema);
 
-// ------------------------
 // 1) Create and Save One Person
 const createAndSavePerson = (done) => {
   const person = new Person({
@@ -32,7 +31,6 @@ const createAndSavePerson = (done) => {
   });
 };
 
-// ------------------------
 // 2) Create Many Records
 const createManyPeople = (arrayOfPeople, done) => {
   Person.create(arrayOfPeople, (err, people) => {
@@ -41,7 +39,6 @@ const createManyPeople = (arrayOfPeople, done) => {
   });
 };
 
-// ------------------------
 // 3) Find People by Name
 const findPeopleByName = (personName, done) => {
   Person.find({ name: personName }, (err, people) => {
@@ -50,7 +47,6 @@ const findPeopleByName = (personName, done) => {
   });
 };
 
-// ------------------------
 // 4) Find One by Food
 const findOneByFood = (food, done) => {
   Person.findOne({ favoriteFoods: food }, (err, person) => {
@@ -59,7 +55,6 @@ const findOneByFood = (food, done) => {
   });
 };
 
-// ------------------------
 // 5) Find by ID
 const findPersonById = (personId, done) => {
   Person.findById(personId, (err, person) => {
@@ -68,7 +63,6 @@ const findPersonById = (personId, done) => {
   });
 };
 
-// ------------------------
 // 6) Find, Edit then Save
 const findEditThenSave = (personId, done) => {
   const foodToAdd = "hamburger";
@@ -83,7 +77,6 @@ const findEditThenSave = (personId, done) => {
   });
 };
 
-// ------------------------
 // 7) Find One and Update
 const findAndUpdate = (personName, done) => {
   const ageToSet = 20;
@@ -99,7 +92,6 @@ const findAndUpdate = (personName, done) => {
   );
 };
 
-// ------------------------
 // 8) Delete One by ID
 const removeById = (personId, done) => {
   Person.findByIdAndRemove(personId, (err, removedDoc) => {
@@ -108,23 +100,15 @@ const removeById = (personId, done) => {
   });
 };
 
-// ------------------------
-// 9) Delete Many People
-const removeManyPeople = (nameToRemove, done) => {
-  Person.remove({ name: nameToRemove }, (err, result) => {
-    if (err) return done(err);
-
-    // แปลง result ให้ตรง format FCC
-    const fixedResult = {
-      n: result.deletedCount || 0,
-      ok: result.acknowledged ? 1 : 0
-    };
-
-    return done(null, fixedResult);
+// 9) Delete Many People (FCC Hint)
+const removeManyPeople = (done) => {
+  const nameToRemove = "Mary";
+  Person.remove({ name: nameToRemove }, (err, response) => {
+    if (err) return console.log(err);
+    done(null, response);
   });
 };
 
-// ------------------------
 // 10) Chain Search Query Helpers
 const queryChain = (done) => {
   const foodToSearch = "burrito";
@@ -139,7 +123,6 @@ const queryChain = (done) => {
     });
 };
 
-// ------------------------
 // Export
 exports.PersonModel = Person;
 exports.createAndSavePerson = createAndSavePerson;
