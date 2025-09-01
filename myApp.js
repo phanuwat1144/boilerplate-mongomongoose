@@ -1,9 +1,15 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
 
+// เชื่อม MongoDB
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
+});
+
+// เพิ่ม listener สำหรับจับ error connection
+mongoose.connection.on('error', (err) => {
+  console.error('MongoDB connection error:', err);
 });
 
 // Schema
@@ -46,7 +52,7 @@ const findPeopleByName = (personName, done) => {
   });
 };
 
-// Remove Many People (แก้ไข)
+// Remove Many People
 const removeManyPeople = (nameToRemove, done) => {
   Person.deleteMany({ name: nameToRemove }, (err, result) => {
     if (err) return done(err);
@@ -60,4 +66,4 @@ exports.PersonModel = Person;
 exports.createAndSavePerson = createAndSavePerson;
 exports.createManyPeople = createManyPeople;
 exports.findPeopleByName = findPeopleByName;
-exports.removeManyPeople = removeManyPeople; // ADD THIS EXPORT
+exports.removeManyPeople = removeManyPeople;
