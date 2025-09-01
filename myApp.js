@@ -56,10 +56,17 @@ const findPeopleByName = (personName, done) => {
 const removeManyPeople = (nameToRemove, done) => {
   Person.deleteMany({ name: nameToRemove }, (err, result) => {
     if (err) return done(err);
-    // result.deletedCount จะบอกจำนวนเอกสารที่ถูกลบ
     return done(null, result);
   });
 };
+
+// 🔹 Placeholder ฟังก์ชันอื่นที่ server.js เรียกแต่ไม่จำเป็นสำหรับ FCC
+const findOneByFood = (food, done) => done(null, []);
+const findPersonById = (id, done) => done(null, null);
+const findEditThenSave = (id, done) => done(null, null);
+const findAndUpdate = (name, done) => done(null, null);
+const removeById = (id, done) => done(null, null);
+const queryChain = (done) => done(null, []);
 
 // 🔹 Export ให้ FreeCodeCamp ใช้
 exports.PersonModel = Person;
@@ -67,3 +74,11 @@ exports.createAndSavePerson = createAndSavePerson;
 exports.createManyPeople = createManyPeople;
 exports.findPeopleByName = findPeopleByName;
 exports.removeManyPeople = removeManyPeople;
+
+// ฟังก์ชัน placeholder
+exports.findOneByFood = findOneByFood;
+exports.findPersonById = findPersonById;
+exports.findEditThenSave = findEditThenSave;
+exports.findAndUpdate = findAndUpdate;
+exports.removeById = removeById;
+exports.queryChain = queryChain;
