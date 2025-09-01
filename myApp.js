@@ -1,20 +1,20 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
 
-// ----- Connect to MongoDB -----
+// Connect
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
-// ----- Define Schema -----
+// Schema
 const personSchema = new mongoose.Schema({
   name: { type: String, required: true },
   age: Number,
   favoriteFoods: [String]
 });
 
-// ----- Create Model -----
+// Model
 const Person = mongoose.model("Person", personSchema);
 
-// ----- Create and Save a Record -----
+// Create & Save one
 const createAndSavePerson = (done) => {
   const person = new Person({
     name: "John",
@@ -28,21 +28,15 @@ const createAndSavePerson = (done) => {
   });
 };
 
-// ----- Create Many Records -----
-const arrayOfPeople = [
-  { name: "Mary", age: 20, favoriteFoods: ["Salad", "Fish"] },
-  { name: "Peter", age: 30, favoriteFoods: ["Steak", "Pasta"] },
-  { name: "Mary", age: 25, favoriteFoods: ["Sushi"] }
-];
-
-const createManyPeople = (done) => {
+// ✅ Create many (ต้องรับ arrayOfPeople, done)
+const createManyPeople = (arrayOfPeople, done) => {
   Person.create(arrayOfPeople, (err, data) => {
     if (err) return done(err);
     done(null, data);
   });
 };
 
-// ----- Find People by Name -----
+// Find by name
 const findPeopleByName = (personName, done) => {
   Person.find({ name: personName }, (err, data) => {
     if (err) return done(err);
@@ -50,7 +44,7 @@ const findPeopleByName = (personName, done) => {
   });
 };
 
-// ----- Delete Many People -----
+// ✅ Delete many (ทดสอบรุ่นใหม่ของ FCC มักยอมรับ deleteMany ดีกว่า remove)
 const removeManyPeople = (done) => {
   const nameToRemove = "Mary";
   Person.deleteMany({ name: nameToRemove }, (err, result) => {
@@ -59,7 +53,7 @@ const removeManyPeople = (done) => {
   });
 };
 
-// ----- Exports (FCC ใช้อ่านค่าตรงนี้) -----
+// Exports for FCC
 exports.PersonModel = Person;
 exports.createAndSavePerson = createAndSavePerson;
 exports.createManyPeople = createManyPeople;
