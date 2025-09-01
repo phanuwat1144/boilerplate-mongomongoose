@@ -38,11 +38,19 @@ const createManyPeople = (arrayOfPeople, done) => {
   });
 };
 
-// ✅ Find People by Name
+// Find People by Name
 const findPeopleByName = (personName, done) => {
   Person.find({ name: personName }, (err, peopleFound) => {
     if (err) return done(err);
     return done(null, peopleFound);
+  });
+};
+
+// Remove Many People (NEW FUNCTION)
+const removeManyPeople = (nameToRemove, done) => {
+  Person.remove({ name: nameToRemove }, (err, result) => {
+    if (err) return done(err);
+    return done(null, result);
   });
 };
 
@@ -51,3 +59,4 @@ exports.PersonModel = Person;
 exports.createAndSavePerson = createAndSavePerson;
 exports.createManyPeople = createManyPeople;
 exports.findPeopleByName = findPeopleByName;
+exports.removeManyPeople = removeManyPeople; // ADD THIS EXPORT
