@@ -1,25 +1,34 @@
 require('dotenv').config();
+const express = require('express');
 const mongoose = require('mongoose');
 
-// 1️⃣ เชื่อมต่อ MongoDB Atlas (ใช้ URI แบบ +srv)
+const app = express();
+app.use(express.json());
+
+// 1️⃣ เชื่อม MongoDB Atlas
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
 .then(() => console.log("MongoDB connected!"))
-.catch(err => console.log(err));
+.catch(err => console.log("MongoDB connection error:", err));
 
-// 2️⃣ สร้าง Schema
+mongoose.connection.on('error', err => {
+  console.error('MongoDB connection error event:', err);
+});
+
+// 2️⃣ สร้าง Schema และ Model
 const personSchema = new mongoose.Schema({
   name: { type: String, required: true },
   age: Number,
   favoriteFoods: [String]
 });
 
-// 3️⃣ สร้าง Model
 const Person = mongoose.model("Person", personSchema);
 
-// 4️⃣ สร้างและบันทึกคนคนเดียว
+// 3️⃣ CRUD Functions
+
+// Create and Save One Person
 const createAndSavePerson = (done) => {
   const person = new Person({
     name: "John Doe",
@@ -27,96 +36,73 @@ const createAndSavePerson = (done) => {
     favoriteFoods: ["Pizza", "Burger"]
   });
 
-  person.save((err, data) => {
-    if (err) return done(err);
-    return done(null, data);
-  });
+  person.save((err, data) => done(err, data));
 };
 
-// 5️⃣ สร้างหลายคนพร้อมกัน
+// Create Many People
 const createManyPeople = (arrayOfPeople, done) => {
-  Person.create(arrayOfPeople, (err, people) => {
-    if (err) return done(err);
-    return done(null, people);
-  });
+  Person.create(arrayOfPeople, (err, people) => done(err, people));
 };
 
-// 6️⃣ หา people โดยชื่อ
+// Find People by Name
 const findPeopleByName = (personName, done) => {
-  Person.find({ name: personName }, (err, peopleFound) => {
-    if (err) return done(err);
-    return done(null, peopleFound);
-  });
+  Person.find({ name: personName }, (err, peopleFound) => done(err, peopleFound));
 };
 
-// 7️⃣ หา **คนเดียว** ตามอาหารที่ชอบ
+// Find One Person by Favorite Food
 const findOneByFood = (food, done) => {
-  Person.findOne({ favoriteFoods: food }, (err, personFound) => {
-    if (err) return done(err);
-    return done(null, personFound);
-  });
+  Person.findOne({ favoriteFoods: food }, (err, personFound) => done(err, personFound));
 };
 
-// 8️⃣ หา person คนเดียวตาม _id
+// Find Person by ID
 const findPersonById = (personId, done) => {
-  Person.findById(personId, (err, personFound) => {
-    if (err) return done(err);
-    return done(null, personFound);
-  });
+  Person.findById(personId, (err, personFound) => done(err, personFound));
 };
 
-// 9️⃣ Classic Update: find -> edit -> save
+// Classic Update: find -> edit -> save
 const findEditThenSave = (personId, done) => {
   Person.findById(personId, (err, person) => {
     if (err) return done(err);
     if (!person) return done(new Error("Person not found"));
-
     person.favoriteFoods.push("hamburger");
-
-    person.save((err, updatedPerson) => {
-      if (err) return done(err);
-      return done(null, updatedPerson);
-    });
+    person.save((err, updatedPerson) => done(err, updatedPerson));
   });
 };
 
-// 🔹 New Update: findOneAndUpdate
+// New Update: findOneAndUpdate
 const findAndUpdate = (personName, done) => {
   Person.findOneAndUpdate(
     { name: personName },
     { age: 20 },
     { new: true },
-    (err, updatedPerson) => {
-      if (err) return done(err);
-      return done(null, updatedPerson);
-    }
+    (err, updatedPerson) => done(err, updatedPerson)
   );
 };
 
-// 🔹 Delete One Document by _id
+// Delete One Document by ID
 const removeById = (personId, done) => {
-  Person.findByIdAndRemove(personId, (err, removedPerson) => {
-    if (err) return done(err);
-    return done(null, removedPerson);
-  });
+  Person.findByIdAndRemove(personId, (err, removedPerson) => done(err, removedPerson));
 };
 
-// 🔹 Delete Many Documents by name (ใช้ deleteMany แทน remove)
+// Delete Many People by Name
 const removeManyPeople = (nameToRemove, done) => {
-  Person.deleteMany({ name: nameToRemove }, (err, result) => {
-    if (err) return done(err);
-    return done(null, result); // result.deletedCount จะถูก test
-  });
+  Person.deleteMany({ name: nameToRemove }, (err, result) => done(err, result));
 };
 
-// 10️⃣ Export ให้ FreeCodeCamp ใช้
-exports.PersonModel = Person;
-exports.createAndSavePerson = createAndSavePerson;
-exports.createManyPeople = createManyPeople;
-exports.findPeopleByName = findPeopleByName;
-exports.findOneByFood = findOneByFood;
-exports.findPersonById = findPersonById;
-exports.findEditThenSave = findEditThenSave;
-exports.findAndUpdate = findAndUpdate;
-exports.removeById = removeById;
-exports.removeManyPeople = removeManyPeople;
+// 4️⃣ Export Functions (FreeCodeCamp / Testing)
+module.exports = {
+  PersonModel: Person,
+  createAndSavePerson,
+  createManyPeople,
+  findPeopleByName,
+  findOneByFood,
+  findPersonById,
+  findEditThenSave,
+  findAndUpdate,
+  removeById,
+  removeManyPeople
+};
+
+// 5️⃣ เริ่ม server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
