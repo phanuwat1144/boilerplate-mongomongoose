@@ -7,7 +7,7 @@ mongoose.connect(process.env.MONGO_URI, {
   useUnifiedTopology: true
 });
 
-// เพิ่ม listener สำหรับจับ error connection
+// listener สำหรับจับ error connection
 mongoose.connection.on('error', (err) => {
   console.error('MongoDB connection error:', err);
 });
@@ -30,7 +30,7 @@ const createAndSavePerson = (done) => {
     favoriteFoods: ["Pizza", "Burger"]
   });
 
-  person.save(function(err, data) {
+  person.save((err, data) => {
     if (err) return done(err);
     return done(null, data);
   });
@@ -54,14 +54,14 @@ const findPeopleByName = (personName, done) => {
 
 // Remove Many People
 const removeManyPeople = (nameToRemove, done) => {
+  // ใช้ Model.remove() ตามโจทย์ FCC
   Person.remove({ name: nameToRemove }, (err, result) => {
     if (err) return done(err);
-    // ส่ง result object กลับตรง ๆ ให้ FCC test
-    return done(null, result);
+    return done(null, result); // ส่ง result ตรง ๆ ให้ FCC test
   });
 };
 
-// 🔹 Placeholder ฟังก์ชันอื่นที่ server.js เรียกแต่ไม่จำเป็นสำหรับ FCC
+// Placeholder ฟังก์ชันอื่นที่ server.js เรียก
 const findOneByFood = (food, done) => done(null, []);
 const findPersonById = (id, done) => done(null, null);
 const findEditThenSave = (id, done) => done(null, null);
