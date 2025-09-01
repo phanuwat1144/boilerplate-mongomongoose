@@ -73,7 +73,7 @@ const removeById = (personId, done) => {
 const removeManyPeople = (nameToRemove, done) => {
   Person.deleteMany({ name: nameToRemove }, (err, result) => {
     if (err) return done(err);
-    done(null, result); // result จะมี { acknowledged: true, deletedCount: X }
+    done(null, result);
   });
 };
 
