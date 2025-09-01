@@ -56,12 +56,8 @@ const findPeopleByName = (personName, done) => {
 const removeManyPeople = (nameToRemove, done) => {
   Person.remove({ name: nameToRemove }, (err, result) => {
     if (err) return done(err);
-    // แปลง result ให้ test ของ FCC รับได้
-    const fixedResult = {
-      n: result.deletedCount || 0,   // จำนวนเอกสารที่ถูกลบ
-      ok: result.acknowledged ? 1 : 0
-    };
-    return done(null, fixedResult);
+    // ส่ง result object กลับตรง ๆ ให้ FCC test
+    return done(null, result);
   });
 };
 
