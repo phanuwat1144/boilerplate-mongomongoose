@@ -67,6 +67,7 @@ const findPersonById = (personId, done) => {
 const findEditThenSave = (personId, done) => {
   Person.findById(personId, (err, person) => {
     if (err) return done(err);
+    if (!person) return done(new Error("Person not found"));
 
     // เพิ่ม "hamburger" ใน favoriteFoods
     person.favoriteFoods.push("hamburger");
@@ -79,6 +80,19 @@ const findEditThenSave = (personId, done) => {
   });
 };
 
+// 🔹 New Update: findOneAndUpdate
+const findAndUpdate = (personName, done) => {
+  Person.findOneAndUpdate(
+    { name: personName }, // query
+    { age: 20 },          // update
+    { new: true },        // คืน document หลังอัปเดต
+    (err, updatedPerson) => {
+      if (err) return done(err);
+      return done(null, updatedPerson);
+    }
+  );
+};
+
 // 10️⃣ Export ให้ FreeCodeCamp ใช้
 exports.PersonModel = Person;
 exports.createAndSavePerson = createAndSavePerson;
@@ -87,3 +101,4 @@ exports.findPeopleByName = findPeopleByName;
 exports.findOneByFood = findOneByFood;
 exports.findPersonById = findPersonById;
 exports.findEditThenSave = findEditThenSave;
+exports.findAndUpdate = findAndUpdate;
