@@ -1,52 +1,53 @@
 require('dotenv').config();
-const express = require('express');
 const mongoose = require('mongoose');
 
-const app = express();
-app.use(express.json());
-
-// Connect MongoDB
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
-})
-.then(() => console.log("MongoDB connected!"))
-.catch(err => console.log("MongoDB connection error:", err));
+});
 
-// Schema & Model
+// Schema
 const personSchema = new mongoose.Schema({
   name: { type: String, required: true },
   age: Number,
   favoriteFoods: [String]
 });
+
+// Model
 const Person = mongoose.model("Person", personSchema);
 
-// CRUD Functions
+// Create and Save One Person
 const createAndSavePerson = (done) => {
-  const person = new Person({ name: "John Doe", age: 25, favoriteFoods: ["Pizza","Burger"] });
-  person.save((err, data) => done(err, data));
-};
+  const person = new Person({
+    name: "John Doe",
+    age: 25,
+    favoriteFoods: ["Pizza", "Burger"]
+  });
 
-// เปลี่ยนตรงนี้
-const removeManyPeople = (nameToRemove, done) => {
-  Person.remove({ name: nameToRemove }, (err, result) => {  // <- ใช้ remove แทน deleteMany
-    if(err) return done(err);
-    done(null, result);
+  person.save(function(err, data) {
+    if (err) return done(err);
+    return done(null, data);
   });
 };
 
-// ==================== ตัวอย่างการเรียกฟังก์ชัน ====================
-createAndSavePerson((err, data) => {
-  if(err) console.log(err);
-  else console.log("Created:", data);
-
-  // ตัวอย่าง removeManyPeople
-  removeManyPeople("John Doe", (err, result) => {
-    if(err) console.log(err);
-    else console.log("Deleted Count:", result.deletedCount);
+// Create Many People
+const createManyPeople = (arrayOfPeople, done) => {
+  Person.create(arrayOfPeople, (err, people) => {
+    if (err) return done(err);
+    return done(null, people);
   });
-});
+};
 
-// Start server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
+// ✅ Find People by Name
+const findPeopleByName = (personName, done) => {
+  Person.find({ name: personName }, (err, peopleFound) => {
+    if (err) return done(err);
+    return done(null, peopleFound);
+  });
+};
+
+// 🔹 Export ให้ FreeCodeCamp ใช้
+exports.PersonModel = Person;
+exports.createAndSavePerson = createAndSavePerson;
+exports.createManyPeople = createManyPeople;
+exports.findPeopleByName = findPeopleByName;
