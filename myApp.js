@@ -101,6 +101,14 @@ const removeById = (personId, done) => {
   });
 };
 
+// 🔹 Delete Many Documents by name
+const removeManyPeople = (nameToRemove, done) => {
+  Person.remove({ name: nameToRemove }, (err, result) => {
+    if (err) return done(err);
+    return done(null, result);
+  });
+};
+
 // 10️⃣ Export ให้ FreeCodeCamp ใช้
 exports.PersonModel = Person;
 exports.createAndSavePerson = createAndSavePerson;
@@ -111,3 +119,4 @@ exports.findPersonById = findPersonById;
 exports.findEditThenSave = findEditThenSave;
 exports.findAndUpdate = findAndUpdate;
 exports.removeById = removeById;
+exports.removeManyPeople = removeManyPeople;
