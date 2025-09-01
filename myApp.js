@@ -100,12 +100,10 @@ const removeById = (personId, done) => {
   });
 };
 
-// 9) Delete Many People (ตามโจทย์ FCC)
-const removeManyPeople = (done) => {
-  const nameToRemove = "Mary";
-  Person.remove({ name: nameToRemove }, (err, data) => {
+const removeManyPeople = (nameToRemove, done) => {
+  Person.remove({ name: nameToRemove }, (err, result) => {
     if (err) return done(err);
-    return done(null, data);
+    done(null, result); // ส่ง object result กลับตรง ๆ
   });
 };
 
