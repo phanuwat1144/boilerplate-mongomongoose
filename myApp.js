@@ -19,18 +19,20 @@ const Person = mongoose.model("Person", personSchema);
 
 // 4. Create and Save a Record
 const createAndSavePerson = (done) => {
+  // ✅ สร้าง instance ของ Model
   const person = new Person({
-    name: "John",
+    name: "John Doe",
     age: 25,
     favoriteFoods: ["Pizza", "Burger"]
   });
 
-  person.save((err, data) => {
+  // ✅ save ลง database
+  person.save(function(err, data) {
     if (err) return done(err);
     return done(null, data);
   });
 };
 
-// ✅ Export (FreeCodeCamp ใช้อ่านตรงนี้)
+// 🔹 Export สำหรับ FreeCodeCamp Tests
 exports.PersonModel = Person;
 exports.createAndSavePerson = createAndSavePerson;
