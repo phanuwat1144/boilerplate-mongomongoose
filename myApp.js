@@ -27,8 +27,9 @@ const createAndSavePerson = (done) => {
   person.save((err, data) => done(err, data));
 };
 
+// เปลี่ยนตรงนี้
 const removeManyPeople = (nameToRemove, done) => {
-  Person.deleteMany({ name: nameToRemove }, (err, result) => {
+  Person.remove({ name: nameToRemove }, (err, result) => {  // <- ใช้ remove แทน deleteMany
     if(err) return done(err);
     done(null, result);
   });
