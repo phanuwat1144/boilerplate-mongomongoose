@@ -100,10 +100,16 @@ const removeById = (personId, done) => {
   });
 };
 
+// 9) Delete Many People
 const removeManyPeople = (nameToRemove, done) => {
   Person.remove({ name: nameToRemove }, (err, result) => {
     if (err) return done(err);
-    done(null, result); // ส่ง object result กลับตรง ๆ
+    // แปลงผลลัพธ์ให้ FCC test รับได้
+    const fixedResult = {
+      n: result.deletedCount || 0,
+      ok: result.acknowledged ? 1 : 0
+    };
+    return done(null, fixedResult);
   });
 };
 
