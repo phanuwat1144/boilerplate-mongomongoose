@@ -93,6 +93,14 @@ const findAndUpdate = (personName, done) => {
   );
 };
 
+// 🔹 Delete One Document by _id
+const removeById = (personId, done) => {
+  Person.findByIdAndRemove(personId, (err, removedPerson) => {
+    if (err) return done(err);
+    return done(null, removedPerson);
+  });
+};
+
 // 10️⃣ Export ให้ FreeCodeCamp ใช้
 exports.PersonModel = Person;
 exports.createAndSavePerson = createAndSavePerson;
@@ -102,3 +110,4 @@ exports.findOneByFood = findOneByFood;
 exports.findPersonById = findPersonById;
 exports.findEditThenSave = findEditThenSave;
 exports.findAndUpdate = findAndUpdate;
+exports.removeById = removeById;
