@@ -97,7 +97,7 @@ const removeById = (personId, done) => {
   });
 };
 
-// 9️⃣ Delete many people
+// 9️⃣ Delete many people (FCC test: "Deleting many items at once should succeed")
 const removeManyPeople = (done) => {
   const nameToRemove = "Mary";
   Person.remove({ name: nameToRemove }, (err, data) => {
@@ -105,8 +105,6 @@ const removeManyPeople = (done) => {
     done(null, data);
   });
 };
-
-exports.removeManyPeople = removeManyPeople;
 
 // 🔟 Query chain: Chaining query helpers
 const queryChain = (done) => {
