@@ -19,23 +19,6 @@ const personSchema = new mongoose.Schema({
 // Model (collection ชื่อ 'people')
 const Person = mongoose.model("people", personSchema);
 
-// --- Insert dummy data สำหรับ test ---
-const insertDummyData = () => {
-  const dummyPeople = [
-    { name: "Mary", age: 16, favoriteFoods: ["burrito"] },
-    { name: "Alice", age: 25, favoriteFoods: ["burrito", "Pizza"] },
-    { name: "Bob", age: 30, favoriteFoods: ["Pasta"] }
-  ];
-
-  // ใช้ insertMany แต่ ignore error ถ้า data ซ้ำ
-  Person.insertMany(dummyPeople, { ordered: false }, (err, docs) => {
-    if (err) console.log("Dummy data insert ignored duplicates:", err.message);
-  });
-};
-
-// เรียก insert dummy data
-insertDummyData();
-
 // --- FCC Functions ---
 
 // 1️⃣ Create & Save one person
@@ -127,15 +110,11 @@ const removeManyPeople = (done) => {
 const queryChain = (done) => {
   const foodToSearch = "burrito";
 
-  // สร้าง query object ก่อน
-  const findQuery = Person.find({ favoriteFoods: foodToSearch });
-
-  // chain helpers ตาม FCC hints
-  findQuery
-    .sort({ name: 1 })      // เรียงชื่อ A → Z
-    .limit(2)               // limit 2 doc
-    .select({ age: 0 })     // ซ่อน age
-    .exec((err, data) => {  // execute query
+  Person.find({ favoriteFoods: foodToSearch })
+    .sort({ name: 1 })   // เรียงชื่อ A → Z
+    .limit(2)            // limit 2 doc
+    .select({ age: 0 })  // ซ่อน age
+    .exec((err, data) => {
       if (err) return done(err);
       done(null, data);
     });
