@@ -16,16 +16,14 @@ const personSchema = new mongoose.Schema({
   favoriteFoods: [String]
 });
 
-// Model (collection ชื่อ 'people')
-const Person = mongoose.model("people", personSchema);
-
-// --- FCC Functions ---
+// Model
+let Person = mongoose.model("people", personSchema);
 
 // 1️⃣ Create & Save one person
 const createAndSavePerson = (done) => {
   const person = new Person({ name: "John", age: 25, favoriteFoods: ["Pizza", "Burger"] });
   person.save((err, data) => {
-    if (err) return done(err);
+    if(err) return done(err);
     done(null, data);
   });
 };
@@ -33,7 +31,7 @@ const createAndSavePerson = (done) => {
 // 2️⃣ Create many people
 const createManyPeople = (arrayOfPeople, done) => {
   Person.create(arrayOfPeople, (err, data) => {
-    if (err) return done(err);
+    if(err) return done(err);
     done(null, data);
   });
 };
@@ -41,7 +39,7 @@ const createManyPeople = (arrayOfPeople, done) => {
 // 3️⃣ Find people by name
 const findPeopleByName = (personName, done) => {
   Person.find({ name: personName }, (err, data) => {
-    if (err) return done(err);
+    if(err) return done(err);
     done(null, data);
   });
 };
@@ -49,7 +47,7 @@ const findPeopleByName = (personName, done) => {
 // 4️⃣ Find one person by food
 const findOneByFood = (food, done) => {
   Person.findOne({ favoriteFoods: food }, (err, data) => {
-    if (err) return done(err);
+    if(err) return done(err);
     done(null, data);
   });
 };
@@ -57,7 +55,7 @@ const findOneByFood = (food, done) => {
 // 5️⃣ Find person by ID
 const findPersonById = (personId, done) => {
   Person.findById(personId, (err, data) => {
-    if (err) return done(err);
+    if(err) return done(err);
     done(null, data);
   });
 };
@@ -66,10 +64,10 @@ const findPersonById = (personId, done) => {
 const findEditThenSave = (personId, done) => {
   const foodToAdd = "hamburger";
   Person.findById(personId, (err, person) => {
-    if (err) return done(err);
+    if(err) return done(err);
     person.favoriteFoods.push(foodToAdd);
     person.save((err, updatedPerson) => {
-      if (err) return done(err);
+      if(err) return done(err);
       done(null, updatedPerson);
     });
   });
@@ -83,7 +81,7 @@ const findAndUpdate = (personName, done) => {
     { age: ageToSet },
     { new: true },
     (err, updatedPerson) => {
-      if (err) return done(err);
+      if(err) return done(err);
       done(null, updatedPerson);
     }
   );
@@ -92,7 +90,7 @@ const findAndUpdate = (personName, done) => {
 // 8️⃣ Delete one by ID
 const removeById = (personId, done) => {
   Person.findByIdAndRemove(personId, (err, removedPerson) => {
-    if (err) return done(err);
+    if(err) return done(err);
     done(null, removedPerson);
   });
 };
@@ -101,7 +99,7 @@ const removeById = (personId, done) => {
 const removeManyPeople = (done) => {
   const nameToRemove = "Mary";
   Person.remove({ name: nameToRemove }, (err, data) => {
-    if (err) return done(err);
+    if(err) return done(err);
     done(null, data);
   });
 };
@@ -109,13 +107,12 @@ const removeManyPeople = (done) => {
 // 🔟 Query chain
 const queryChain = (done) => {
   const foodToSearch = "burrito";
-
   Person.find({ favoriteFoods: foodToSearch })
     .sort({ name: 1 })
     .limit(2)
     .select({ age: 0 })
     .exec((err, data) => {
-      if (err) return done(err);
+      if(err) return done(err);
       done(null, data);
     });
 };
