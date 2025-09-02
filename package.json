@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "dotenv": "^8.2.0",
-    "mongoose": "5.9.20",
+    "mongoose": "^5.11.15",
     "express": "^4.18.2",
     "body-parser": "^1.20.2"
   },
