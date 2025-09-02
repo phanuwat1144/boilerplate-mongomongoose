@@ -8,8 +8,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false })); // FCC boilerplate ใช้แค่ urlencoded
+// app.use(bodyParser.json()); // ไม่จำเป็นสำหรับ FCC test แต่ถ้าอยากใช้ก็ได้
 
 app.get("/", (req, res) => {
   res.send("FreeCodeCamp MongoDB Mongoose Project");
