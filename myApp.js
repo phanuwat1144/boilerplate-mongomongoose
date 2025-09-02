@@ -97,7 +97,7 @@ const removeById = (personId, done) => {
   });
 };
 
-// 9️⃣ Delete many people (FCC test: "Deleting many items at once should succeed")
+// 9️⃣ Delete many people
 const removeManyPeople = (done) => {
   const nameToRemove = "Mary";
   Person.remove({ name: nameToRemove }, (err, data) => {
@@ -106,14 +106,14 @@ const removeManyPeople = (done) => {
   });
 };
 
-// 🔟 Query chain: Chaining query helpers
+// 🔟 Query chain
 const queryChain = (done) => {
   const foodToSearch = "burrito";
 
   Person.find({ favoriteFoods: foodToSearch })
-    .sort({ name: 1 })   // เรียงชื่อ A → Z
-    .limit(2)            // limit 2 doc
-    .select({ age: 0 })  // ซ่อน age
+    .sort({ name: 1 })
+    .limit(2)
+    .select({ age: 0 })
     .exec((err, data) => {
       if (err) return done(err);
       done(null, data);
